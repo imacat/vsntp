@@ -1,6 +1,6 @@
 vsntp NEWS
 
-2021-02-07
+2021-02-07	version 2.1.1
 	 1. AUTHORS.zh-tw, INSTALL.zh-tw, NEWS.zh-tw, README.zh-tw, THANKS.zh-tw,
 	    init.d/README.zh-tw, AUTHORS.zh-cn, INSTALL.zh-cn, NEWS.zh-cn,
 	    README.zh-cn, THANKS.zh-cn, init.d/README.zh-cn: Removed messy

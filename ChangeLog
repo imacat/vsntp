@@ -1,6 +1,6 @@
 vsntp change log
 
-2020-02-07
+2020-02-07	version 2.1.1
 	 1. .gitignore Added that excludes generated files by automake and
 	    autoconf.
 	 2. .git: Re-initialized.

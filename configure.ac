@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([vsntp], [2.1.0], [imacat@mail.imacat.idv.tw])
+AC_INIT([vsntp], [2.1.1], [imacat@mail.imacat.idv.tw])
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([vsntp.c])
 AC_CONFIG_HEADERS([config.h])
