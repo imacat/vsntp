@@ -1,5 +1,25 @@
 vsntp NEWS
 
+2021-02-07
+	 1. AUTHORS.zh-tw, INSTALL.zh-tw, NEWS.zh-tw, README.zh-tw, THANKS.zh-tw,
+	    init.d/README.zh-tw, AUTHORS.zh-cn, INSTALL.zh-cn, NEWS.zh-cn,
+	    README.zh-cn, THANKS.zh-cn, init.d/README.zh-cn: Removed messy
+	    multi-lingual documents.
+	 2. README: Revised the URL and typos.
+
+2013-11-13	version 2.1.0 (not released)
+	 1. vsntp.c: Removed the weird method to calculate the next time line
+	    for synchronization.  It was my bad taste to synchronize at the
+	    the time of multiples of interval.  When many clients are
+	    synchronized to a same server, synchronizing them at a same time
+	    will overload the server and create DDoS.  Thanks to the reminder of
+	    Steven Shen <fbishen@gmail.com>.
+	 2. AUTHORS.zh-tw, INSTALL.zh-tw, NEWS.zh-tw, README.zh-tw, THANKS.zh-tw,
+	    init.d/README.zh-tw, AUTHORS.zh-cn, INSTALL.zh-cn, NEWS.zh-cn,
+	    README.zh-cn, THANKS.zh-cn, init.d/README.zh-cn: Converted from Big5
+	    and GB2312 to UTF-8.
+	 3. License updated to GPLv3.
+
 2007-03-29	version 2.0.0
 	 1. Added alarm() in addition to sleep() as an alternative
 	    synchronization scheduler, in order to fix a problem that vsntp
@@ -7,7 +27,7 @@ vsntp NEWS
 	    for a while, as reported and suggested by Jean-Alain Le Borgne
 	    <jalb@pobox.com> 2007-03-26.  The codes are based on
 	    Jean-Alain's contribution.  Thank you.  Two new switches "-a" and
-	    "-s" were added for for setting the schedular.  Currently the
+	    "-s" were added for for setting the scheduler.  Currently the
 	    default is -s (sleep()).  If you find vsntp stops synchronization
 	    after running for some time, that the sleep() is not functioning
 	    normally on your system, you may try to switch to alarm() using

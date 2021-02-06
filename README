@@ -6,19 +6,17 @@ Obtaining the Newest Information
 
     vsntp's official website is at...
 
-      SourceForge's home site: http://vsntp.sourceforge.net/
-      SourceForge's project page: https://sourceforge.net/projects/vsntp/
-      Tavern IMACAT's page: http://www.imacat.idv.tw/tech/vsntp.html
+      vsntp project on GitHub: https://github.com/imacat/vsntp
+      vsntp project on SourceForge: https://sf.net/p/vsntp
 
     You can always download the newest version of vsntp from...
 
-      SourceForge: https://sourceforge.net/project/showfiles.php?group_id=99098
-      Tavern IMACAT's FTP: ftp://ftp.imacat.idv.tw/pub/vsntp/
+      vsntp download on SourceForge: https://sourceforge.net/projects/vsntp/files
+      Tavern IMACAT's FTP directory: https://ftp.imacat.idv.tw/pub/vsntp/
 
     imacat's PGP public key is at...
 
-      SourceForge: http://vsntp.sourceforge.net/pgpkey.asc
-      Tavern IMACAT's: http://www.imacat.idv.tw/me/pgpkey.asc
+      Tavern IMACAT's: https://www.imacat.idv.tw/me/pgpkey.asc
 
 Introduction:
 
@@ -37,7 +35,7 @@ With smooth run it goes 4 seconds ahead per minute, which is nearly
 eyes.
 
     David L. Mills' ntp does not work here.  It uses a method that
-learns the clock frequency drift first, and adjust the kerenl clock
+learns the clock frequency drift first, and adjust the kernel clock
 with adjtimex() so that time adjustment goes smoothly, from the point
 of view of system and applications.  This assumes an existing fix-
 speed system clock.  But this is not the case of Virtual PC.  The
@@ -80,8 +78,8 @@ LOG_DEBUG with facility LOG_DAEMON.  You may turn it on in your
 
 and check the /var/log/debug file for the debugging message.  Remember
 to remove this afterwards, for the amount of the debugging messages
-may be huge and may use up your harddisk in a very short time.  To the
-least it may slow down your system for frequent harddisk I/O.
+may be huge and may use up your hard disk in a very short time.  To the
+least it may slow down your system for frequent hard disk I/O.
 
     vsntp was originally written for GNU/Linux.  It uses POSIX
 compatible system calls.  It should work on any POSIX compatible

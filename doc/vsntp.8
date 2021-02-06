@@ -46,7 +46,7 @@ That is insane.  You can even tell it with your eyes.
 David L. Mills'
 .B ntp
 does not work here.  It uses a method that learns the clock frequency
-drift first, and adjust the kerenl clock with
+drift first, and adjust the kernel clock with
 .B adjtimex()
 so that time adjustment goes smoothly, from the point of view of
 system and applications.  This assumes an existing fix-speed system
@@ -174,29 +174,14 @@ and check the
 .I /var/log/debug
 file for the debugging message.  Remember to remove this afterwards,
 for the amount of the debugging messages may be huge and may use up
-your harddisk in a very short time.  To the least it may slow down
-your system for frequent harddisk
+your hard disk in a very short time.  To the least it may slow down
+your system for frequent hard disk
 .SM "I/O" .
 .SH BUGS
+The
 .B vsntp
-is hosted on SourceForge and Tavern IMACAT's.  For the latest
-infomation, see:
-
-  http://vsntp.sourceforge.net/
-  https://sourceforge.net/projects/vsntp/
-  http://www.imacat.idv.tw/tech/vsntp.html
-
-.B vsntp has a mailing list hosted at SourceForge:
-vsntp-users@lists.sourceforge.net .  Please submit your questions,
-suggestions or bug reports there.  It is a Mailman mailing list.
-For more information, see:
-
-  https://lists.sourceforge.net/lists/listinfo/vsntp-users
-
-Alternatively, you can send a mail to:
-vsntp-users-request@lists.sourceforge.net with the subject
-.B help
-for a list of available e-mail commands.
+project is hosted on GitHub.  Address your issues on the GitHub issue
+tracker https://github.com/imacat/chklinks/issues.
 .SH AUTHOR
 imacat <imacat@mail.imacat.idv.tw>.
 .SH "SEE ALSO"

@@ -1,6 +1,23 @@
 vsntp change log
 
-2013-11-13
+2020-02-07
+	 1. .gitignore Added that excludes generated files by automake and
+	    autoconf.
+	 2. .git: Re-initialized.
+	 3. AUTHORS.zh-tw, INSTALL.zh-tw, NEWS.zh-tw, README.zh-tw, THANKS.zh-tw,
+	    init.d/README.zh-tw, AUTHORS.zh-cn, INSTALL.zh-cn, NEWS.zh-cn,
+	    README.zh-cn, THANKS.zh-cn, init.d/README.zh-cn: Removed messy
+	    multi-lingual documents.
+	 4. README, ChangeLog, doc/vsntp.8, doc/vsntp.texi, init.d/vsntp.debian,
+	    init.d/vsntp.redhat: Revised the URL and typos.
+	 5. NEWS, init.d/README: Fixed typos.
+	 6. vsntp.c, Makefile.am, doc/Makefile.am, init.d/Makefile.am, COPYING:
+	    Updated the URL.
+
+2020-02-01
+	 vsntp is hosted on GitHub now.
+
+2013-11-13	version 2.1.0 (not released)
 	Does not work on x86_64 yet.  Don't know whether it still works on i386.
 	I don't have i386 anymore.
 	 1. vsntp.c: Removed the weird method to calculate the next time line
@@ -10,10 +27,10 @@ vsntp change log
 	    will overload the server and create DDoS.  Thanks to the reminder of
 	    Steven Shen <fbishen@gmail.com>.
 	 2. AUTHORS.zh-tw, INSTALL.zh-tw, NEWS.zh-tw, README.zh-tw, THANKS.zh-tw,
-	    init.d/README.zh-tw: Converted from Big5 to UTF-8.  I'm not woking
+	    init.d/README.zh-tw: Converted from Big5 to UTF-8.  I'm not working
 	    on Windows anymore.  Big5 cause problem with gedit.
 	 3. AUTHORS.zh-cn, INSTALL.zh-cn, NEWS.zh-cn, README.zh-cn, THANKS.zh-cn,
-	    init.d/README.zh-cn: Converted from GB2312 to UTF-8.  I'm not woking
+	    init.d/README.zh-cn: Converted from GB2312 to UTF-8.  I'm not working
 	    on Windows anymore.  GB2312 cause problem with gedit.
 	 4. configure: Updated with GNU Autoconf 2.69.
 
@@ -24,17 +41,17 @@ vsntp change log
 	 4. Removed Traditional Chinese comments.
 
 2004-03-29	version 2.0.0
-	 1. vsntp.c: The syhchronization scheduler has been rewritten to
+	 1. vsntp.c: The synchronization scheduler has been rewritten to
 	    allow alternative schedulers, in order to work with the problem
 	    reported by Jean-Alain Le Borgne <jalb@pobox.com> 2007-03-26,
 	    that sleep() may not return after MS Virtual PC 2007 was suspended
 	    for a while.
-	 2. vsntp.c: An alternative schedular using alarm() was added in
+	 2. vsntp.c: An alternative scheduler using alarm() was added in
 	    addition to sleep(), based on the contribution by Jean-Alain.
 	 3. vsntp.c: New subroutine setsigalrm() was added to set the SIGALRM
 	    signal handler.
 	 4. vsntp.c: New subroutine alarm_wakeup() was added as the alarm()
-	    schedular.
+	    scheduler.
 	 5. vsntp.c: Two new constants SCHEDULER_SLEEP and SCHEDULER_ALARM were
 	    added as the scheduler choices of the user.
 	 6. vsntp.c: Two new switches -a/--alarm and -s/--sleep were added for
@@ -53,7 +70,7 @@ vsntp change log
 	12. vsntp.c: Re-formatting error messages and warnings according to
 	    the GNU Coding Standards, as:
 	      source-file-name:lineno: message
-            Refer to: http://www.gnu.org/prep/standards/html_node/Errors.html
+            Refer to: https://www.gnu.org/prep/standards/html_node/Errors.html
 	13. vsntp.c: Added logging before connect(), send() and recv() at
 	    log level LOG_DEBUG in order to know the current progress when
 	    debugging network problems.
@@ -68,9 +85,9 @@ vsntp change log
 	17. vsntp.c: English comment fix.  "... and handle errors" was updated
 	    as "... and handle its error."
 	18. configure.ac: Added AC_TYPE_SSIZE_T, and added "alarm()" in
-	    AC_CHECK_FUNCS, acccording to the suggestion by automake 1.9.6.
-	19. configure.in and aclocal.m4: Regenrated using automake 1.9.6.
-	20. configure: Regenrated using autoconf 2.61.
+	    AC_CHECK_FUNCS, according to the suggestion by automake 1.9.6.
+	19. configure.in and aclocal.m4: Regenerated using automake 1.9.6.
+	20. configure: Regenerated using autoconf 2.61.
 	21. vsntp.c: Added conditional #ifdef, so that if alarm() is not
 	    supported on the target platform the alarm() scheduler will not
 	    be compiled.
@@ -84,7 +101,7 @@ vsntp change log
 	25. vsntp.c: Fixed the basic profile in the beginning comment, from
 	    synctime.c to vsntp.c.  That was the first name of vsntp.  It was
 	    renamed for years.
-	26. vsntp.8: Fixed the BUGS chapter, replacing the originall text with
+	26. vsntp.8: Fixed the BUGS chapter, replacing the original text with
 	    the SourceForge users' mailing list information.
 	27. README, vsntp.8 and vsntp.texi: Added notes about the scheduler
 	    issue.

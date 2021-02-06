@@ -7,8 +7,8 @@
 # processname: vsntp
 # config: /etc/sysconfig/vsntp
 
-# LSB-convension comments
-# See: http://refspecs.freestandards.org/LSB_3.1.0/LSB-Core-generic/LSB-Core-generic/initscrcomconv.html
+# LSB-convention comments
+# See: https://refspecs.linuxfoundation.org/LSB_5.0.0/LSB-Core-generic/LSB-Core-generic/initscrcomconv.html
 ### BEGIN INIT INFO
 # Provides:          vsntp
 # Required-Start:    $network $time
@@ -17,16 +17,16 @@
 # Default-Stop:      0 1 6
 # Short-Description: start and stop the SNTP client for Virtual PC
 # Description:       vsntp is a SNTP client for Virtual PC that synchronize
-#                    time periodically for systems without hardward RTC.
+#                    time periodically for systems without hardware RTC.
 ### END INIT INFO
 
 export PATH=/sbin:/bin:/usr/sbin:/usr/bin
 
 # initialize the environment
-THISFILE="${0##*/}"
+THIS_FILE="${0##*/}"
 VERSION="1.0.0"
-AUTHORNAME=imacat
-AUTHORMAIL=imacat@mail.imacat.idv.tw
+AUTHOR_NAME=imacat
+AUTHOR_MAIL=imacat@mail.imacat.idv.tw
 lock=/var/lock/subsys/vsntp
 
 # Source function library.
@@ -49,13 +49,13 @@ alarm|a|-a|--alarm)
 esac
 
 # default values -- do not change anything here
-_DEFSYNC_INTERVAL=900
-_DEFSCHEDULER=-s
+_DEF_SYNC_INTERVAL=900
+_DEF_SCHEDULER=-s
 
 RETVAL="0"
 OPTIONS=""
-test -n "$SCHEDULER" -a "$SCHEDULER" != "$_DEFSCHEDULER" && OPTIONS="$OPTIONS $SCHEDULER"
-test -n "$SYNC_INTERVAL" -a "$SYNC_INTERVAL" != "$_DEFSYNC_INTERVAL" && OPTIONS="$OPTIONS -i $SYNC_INTERVAL"
+test -n "$SCHEDULER" -a "$SCHEDULER" != "$_DEF_SCHEDULER" && OPTIONS="$OPTIONS $SCHEDULER"
+test -n "$SYNC_INTERVAL" -a "$SYNC_INTERVAL" != "$_DEF_SYNC_INTERVAL" && OPTIONS="$OPTIONS -i $SYNC_INTERVAL"
 OPTIONS="$OPTIONS $SERVER"
 
 # See how we were called.
@@ -93,28 +93,28 @@ while [ "$#" != "0" ]; do
   -h|--help)
     cat << EOF
 Start and/or stop the SNTP client for Virtual PC
-Usage: $THISFILE {start|stop|restart|status}
+Usage: $THIS_FILE {start|stop|restart|status}
 
   start         Start the daemon.
   stop          Stop the daemon.
   restart       Stop and restart the daemon.
   status        Display the daemon status
   -h,--help     Display this help.
-  -v,--version  Display the version infomation.
+  -v,--version  Display the version information.
 
-Report bugs to $AUTHORNAME <$AUTHORMAIL>
+Report bugs to $AUTHOR_NAME <$AUTHOR_MAIL>
 EOF
     exit 0
     ;;
   -v|--version)
     cat << EOF
-$THISFILE v$VERSION by $AUTHORNAME <$AUTHORMAIL>
+$THIS_FILE v$VERSION by $AUTHOR_NAME <$AUTHOR_MAIL>
 EOF
     exit 0
     ;;
   *)
-    echo "$THISFILE: unrecognized argument: $1"
-    echo "Try \`$THISFILE --help' for more infomation"
+    echo "$THIS_FILE: unrecognized argument: $1"
+    echo "Try \`$THIS_FILE --help' for more information"
     exit 1
     ;;
   esac
@@ -124,7 +124,7 @@ done
 # check the arguments
 if [ -z "$action" ]; then
   cat << EOF
-Usage: $THISFILE {start|stop|restart|status}
+Usage: $THIS_FILE {start|stop|restart|status}
 EOF
   exit 0
 fi

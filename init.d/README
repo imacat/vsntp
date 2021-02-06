@@ -14,7 +14,7 @@ systems (Knoppix, Ubuntu... etc.)  The other is for Red Hat based systems
 (Fedora, Mandriva... etc.)  They are not installed by default.  You may
 install them so that vsntp will start as a daemon after each reboot.
 
-    Installion is easy.  You have to be root.
+    Installation is easy.  You have to be root.
 
 DEBIAN BASED SYSTEMS
 
@@ -31,7 +31,7 @@ server.  Once finished, run:
 
     And watch the syslog.  vsntp shall start working.
 
-    To run it every time the system boots, use updat-rc.d:
+    To run it every time the system boots, use update-rc.d:
 
       # update-rc.d vsntp defaults 23
 

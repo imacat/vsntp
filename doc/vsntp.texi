@@ -12,7 +12,7 @@ This manual is for vsntp
 (version @value{VERSION}, @value{UPDATED}),
 a SNTP daemon for Virtual @acronym{PC}@.
 
-Copyright @copyright{} 2003-2007 imacat@.
+Copyright @copyright{} 2003-2021 imacat@.
 
 @quotation
 Permission is granted to copy, distribute and/or modify this document
@@ -33,7 +33,7 @@ Free Documentation License''@.
 @insertcopying
 Published by imacat@*
 @email{imacat@@mail.imacat.idv.tw}@*
-@uref{http://www.imacat.idv.tw/}@*
+@uref{https://www.imacat.idv.tw/}@*
 @end titlepage
 @c Output the table of contents at the beginning.
 @contents
@@ -84,7 +84,7 @@ insane@.  You can even tell it with your eyes@.
 @findex adjtimex()
 @uref{http://www.ntp.org/,David L. Mills' @command{ntp}} does not
 work here@.  It uses a method that learns the clock frequency drift
-first, and adjust the kerenl clock with @code{adjtimex()} so that
+first, and adjust the kernel clock with @code{adjtimex()} so that
 time adjustment goes smoothly, from the point of view of system and
 applications@.  This assumes an existing fix-speed system clock@.
 But this is not the case of Virtual @acronym{PC}@.  The system clock
@@ -135,9 +135,9 @@ daemon.debug   /var/log/debug
 
 and check the @file{/var/log/debug} file for the debugging message@.
 Remember to remove this afterwards, for the amount of the debugging
-messages may be huge and may use up your harddisk in a very short
+messages may be huge and may use up your hard disk in a very short
 time@.  To the least it may slow down your system for frequent
-harddisk @acronym{I/O}@.
+hard disk @acronym{I/O}@.
 
 @command{vsntp} was originally written for @acronym{GNU}/Linux@.  It
 uses @acronym{POSIX} compatible system calls@.  It should work on
@@ -149,7 +149,7 @@ other systems@.  I know it does not work on MSWin32, for the way it
 handles the @acronym{PID} file path@.
 
 Please tell me if you have successfully running @command{vsntp} on
-other virtual machines, like @uref{http://www.vmware.com/, VMWare}@.
+other virtual machines, like @uref{https://www.vmware.com/, VMWare}@.
 
 Generally, please tell me if you are using @command{vsntp}@.  I
 would like to know that I am really doing some good for the world,
@@ -164,20 +164,14 @@ would like to know that I am really doing some good for the world,
 @cindex download
 @cindex SourceForge
 @cindex Tavern IMACAT's
-@command{vsntp}'s official website is at@dots{}
+@command{vsntp} is hosted is on@dots{}
 
 @itemize
 @item
-@uref{https://sourceforge.net/,SourceForge}'s home site:
-@uref{http://vsntp.sourceforge.net/}
+@uref{https://github.com/imacat/vsntp,vsntp project on GitHub}
 
 @item
-@uref{https://sourceforge.net/,SourceForge}'s project page:
-@uref{https://sourceforge.net/projects/vsntp/}
-
-@item
-@uref{http://www.imacat.idv.tw/,Tavern IMACAT's} page:
-@uref{http://www.imacat.idv.tw/tech/vsntp.html}
+@uref{https://sf.net/p/vsntp,vsntp project on SourceForge}
 @end itemize
 
 You can always download the newest version of @command{vsntp}
@@ -186,23 +180,17 @@ from@dots{}
 @itemize
 @item
 SourceForge:
-@uref{https://sourceforge.net/project/showfiles.php?group_id=99098}
+@uref{https://sourceforge.net/projects/vsntp/files,vsntp download on SourceForge}
 
 @item
-Tavern IMACAT's @acronym{FTP}:
-@uref{ftp://ftp.imacat.idv.tw/pub/vsntp/}
+@uref{https://ftp.imacat.idv.tw/pub/chklinks/,Tavern IMACAT's FTP directory}
 @end itemize
 
 imacat's @acronym{PGP} public key is at@dots{}
 
 @itemize
 @item
-SourceForge:
-@uref{http://vsntp.sourceforge.net/pgpkey.asc}
-
-@item
-Tavern IMACAT's:
-@uref{http://www.imacat.idv.tw/me/pgpkey.asc}
+@uref{https://www.imacat.idv.tw/me/pgpkey.asc,imacat’s PGP key at Tavern IMACAT’s}
 @end itemize
 
 
@@ -330,34 +318,10 @@ Display version information@.
 
 @cindex SourceForge
 @cindex Tavern IMACAT's
-@command{vsntp} is hosted on
-@uref{https://sourceforge.net/,SourceForge} and
-@uref{http://www.imacat.idv.tw/,Tavern IMACAT's}@.  For the latest
-infomation, see:
-
-@itemize
-@item
-@uref{http://vsntp.sourceforge.net/}
-@item
-@uref{https://sourceforge.net/projects/vsntp/}
-@item
-@uref{http://www.imacat.idv.tw/tech/vsntp.html}
-@end itemize
-
-@cindex mailing list
-@cindex Mailman
-@command{vsntp} has a mailing list hosted at
-@uref{https://sourceforge.net/,SourceForge}:
-@email{vsntp-users@@lists.sourceforge.net}@.  Please submit your
-questions, suggestions or bug reports there@.  It is a
-@uref{http://www.list.org/,Mailman} mailing list@.  For more
-information, see:
-@uref{https://lists.sourceforge.net/lists/listinfo/vsntp-users}@.
-Alternatively, you can send a mail to:
-@email{vsntp-users-request@@lists.sourceforge.net}
-with the subject @code{help} for a list of available e-mail
-commands@.
-
+The @command{vsntp} project is hosted on GitHub.  Address your issues on the
+GitHub issue tracker
+@uref{https://github.com/imacat/vsntp/issues}
+.
 
 @node References
 @unnumbered References
@@ -385,7 +349,7 @@ commands@.
 @unnumbered Copyright
 
 @quotation
-Copyright @copyright{} 2003-2007 imacat@.
+Copyright @copyright{} 2003-2021 imacat@.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the @cite{@acronym{GNU} General Public License}
@@ -399,7 +363,7 @@ See the @cite{@acronym{GNU} General Public License} for more details@.
 
 You should have received a copy of the @cite{@acronym{GNU} General
 Public License} along with this program@.  If not, see
-<@uref{http://www.gnu.org/licenses/}>@.
+<@uref{https://www.gnu.org/licenses/}>@.
 @end quotation
 
 @node Index
