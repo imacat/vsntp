@@ -1,0 +1,13 @@
+# SNTP client for Virtual PC configuration file
+#   by imacat <imacat@mail.imacat.idv.tw> 2007-03-29
+
+# SERVER: The server.  Uncomment this line and replace it with YOUR LOCAL NTP SERVER.
+#   This must be set and cannot be commented out.
+#SERVER=my.ntp.server.com
+
+# SCHEDULER: Choose the scheduler.  Currently either "sleep" or "alarm"
+#  Values that are not "alarm" are treated as "sleep".
+SCHEDULER=sleep
+
+# SYNC_INTERVAL: The synchronization interval, in seconds.  The default is 900.
+SYNC_INTERVAL=900

@@ -1,0 +1,7 @@
+    Thanks to SourceForge's people to kindly provide hosting of the
+vsntp project.
+
+    Thanks to Jean-Alain Le Borgne <jalb@pobox.com> to debug and find out
+the sleep() scheduler problem when MS Virtual PC 2007 suspended for a while,
+file a bug report and provide a fix with an alternative scheduler alarm()
+on 2007-03-26.

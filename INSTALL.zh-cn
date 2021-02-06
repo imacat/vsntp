@@ -1,0 +1,81 @@
+vsntp 安装执行说明
+
+一、编译安装程序
+
+    vsntp 使用标准的 GNU autoconf 来安装编译：
+
+     1. 下载 vsntp 并解压缩：
+
+      % tar xzf vsntp-x.x.x.tar.gz
+
+     2. 进入 vsntp 的子目录：
+
+      % cd vsntp-x.x.x
+
+     3. 执行 ./configure 设定：
+
+      % ./configure
+
+     4. 以 make 编译：
+
+      % make
+
+        编译出来的档案为 vsntp 。
+
+     5. 要安装程式，你可能要先  su 到 root ，用 root 的权限安装：
+
+      % su
+      Password:
+      #
+
+     6. 将 vsntp 档复制到适当的目录即可：
+
+      # cp vsntp /usr/local/sbin
+
+        或者，你也可以用自动安装：
+
+      # make install
+
+        或用 install-strip 清除档案里的除错符号，安装起来档案比较小：
+
+      # make install-strip
+
+        用上述方式安装时， vsntp 预设安装目录在 /usr/local/sbin 。
+
+二、编译安装选项
+
+    GNU autoconf 的 configure 提供下列的编译安装选项：
+
+  --prefix=PREFIX	作业平台无关的档案装在 PREFIX 下 [/usr/local]
+  --exec-prefix=EPREFIX	作业平台专用的档案装在 EPREFIX 下 [PREFIX]
+
+  --bindir=DIR		一般使用者用的执行档 [EPREFIX/bin]
+  --sbindir=DIR		系统管理者用的执行档 [EPREFIX/sbin]
+  --libexecdir=DIR	程式内部引用的执行档 [EPREFIX/libexec]
+  --datadir=DIR		与作业平台无关的唯读资料 [PREFIX/share]
+  --sysconfdir=DIR	本系统专用的唯读资料 [PREFIX/etc]
+  --sharedstatedir=DIR	与作业平台无关的异动资料 [PREFIX/com]
+  --localstatedir=DIR	本系统专用的异动资料 [PREFIX/var]
+  --libdir=DIR		目的码程式库 [EPREFIX/lib]
+  --includedir=DIR	C 语言标头档 [PREFIX/include]
+  --oldincludedir=DIR	非 gcc 用的 C 语言标头档 [/usr/include]
+  --infodir=DIR		info 说明文件 [PREFIX/info]
+  --mandir=DIR		man 说明文件 [PREFIX/man]
+
+    完整的编译安装选项，请参阅 ./configure --help 的说明。
+
+三、执行
+
+    要有 root 权限才能执行 vsntp 。 vsntp 用 settimeofday() 对时，没
+有 root 权限不能执行 settimeofday() 。
+
+    要启动 vsntp ，加上对时用的 ntp server 即可：
+
+      # vsntp my.ntp.server.com
+
+    vsntp 会把 PID 存在 /var/run/vsntp.pid 。要结束程式，只要 kill 它
+的 PID 即可：
+
+      # kill `cat /var/run/vsntp.pid`
+
+    你可以用 -p 选项，更改 PID 档的位置。

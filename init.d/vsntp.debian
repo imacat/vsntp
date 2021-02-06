@@ -1,0 +1,182 @@
+#!/bin/sh
+# start and stop the SNTP client for Virtual PC
+
+# LSB-convension comments
+# See: http://refspecs.freestandards.org/LSB_3.1.0/LSB-Core-generic/LSB-Core-generic/initscrcomconv.html
+### BEGIN INIT INFO
+# Provides:          vsntp
+# Required-Start:    $network $time
+# Required-Stop:     
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: start and stop the SNTP client for Virtual PC
+# Description:       vsntp is a SNTP client for Virtual PC that synchronize
+#                    time periodically for systems without hardward RTC.
+### END INIT INFO
+
+export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+
+THISFILE=${0##*/}
+VERSION=1.1.0
+AUTHORNAME=imacat
+AUTHORMAIL=imacat@mail.imacat.idv.tw
+DESC="SNTP client for Virtual PC"
+THISCONF=/etc/default/vsntp
+
+# source the configuration
+test -e $THISCONF && . $THISCONF
+case "$SCHEDULER" in
+alarm|a|-a|--alarm)
+  SCHEDULER=-a ;;
+*)
+  SCHEDULER=-s ;;
+esac
+
+BINPATH=/usr/sbin/vsntp
+BINNAME=${BINPATH##*/}
+PIDFILE=/var/run/$BINNAME.pid
+RUNUSER=root
+
+# default values -- do not change anything here
+_DEFSYNC_INTERVAL=900
+_DEFSCHEDULER=-s
+
+# startup options
+OPTS=""
+test -n "$SCHEDULER" -a "$SCHEDULER" != "$_DEFSCHEDULER" && OPTS="$OPTS $SCHEDULER"
+test -n "$SYNC_INTERVAL" -a "$SYNC_INTERVAL" != "$_DEFSYNC_INTERVAL" && OPTS="$OPTS -i $SYNC_INTERVAL"
+OPTS="$OPTS $SERVER"
+
+# sanity checks
+if test ! -n "$SERVER"; then
+  echo "$THISFILE: You must set the SERVER in $THISCONF" >&2
+  exit 1
+fi
+if test ! -x $BINPATH; then
+  echo "$THISFILE: Missing valid daemon program at $BINPATH" >&2
+  exit 1
+fi
+if test -n "$USER" -a ! "$USER" = "root"; then
+  echo "$THISFILE: You need to be root to run this script." >&2
+  exit 1
+fi
+
+start () {
+  echo -n "Starting $DESC:"
+  RETVAL=0
+  
+  echo -n " $BINNAME"
+  start-stop-daemon --start --startas $BINPATH --quiet \
+    --pidfile $PIDFILE --name $BINNAME --user $RUNUSER --exec $BINPATH -- $OPTS
+  RETVALS=$?
+  test $RETVALS = 0 || { echo -n ":failed"; RETVAL=$RETVALS; }
+  
+  echo "."
+  return $RETVAL
+}
+
+stop () {
+  echo -n "Stopping $DESC:"
+  RETVAL=0
+  
+  echo -n " $BINNAME"
+  start-stop-daemon --stop --quiet \
+    --pidfile $PIDFILE --name $BINNAME --user $RUNUSER --exec $BINPATH
+  RETVALS=$?
+  test $RETVALS = 0 || { echo -n ":failed"; RETVAL=$RETVALS; }
+  rm -f $PIDFILE
+  
+  echo "."
+  return $RETVAL
+}
+
+restart () {
+  stop
+  sleep 1
+  start
+  RETVAL=$?
+  return $RETVAL
+}
+
+status () {
+  RETVAL=0
+  
+  start-stop-daemon --stop --signal 0 --quiet \
+    --pidfile $PIDFILE --name $BINNAME --user $RUNUSER --exec $BINPATH
+  RETVALS=$?
+  if test $RETVALS = 0; then
+    echo "$DESC $BINNAME is up and running ($(<$PIDFILE))."
+  else
+    echo "$DESC $BINNAME is not running (or some problem may exists)."
+    RETVAL=$RETVALS
+  fi
+  
+  return $RETVAL
+}
+
+# parse the arguments
+while test $# != 0; do
+  case "$1" in
+  start|stop|restart|force-reload|status)
+    action="$1"
+    ;;
+  -h|--help)
+    cat << EOF
+Start and/or stop the $DESC
+Usage: $THISFILE {start|stop|restart|force-reload|status}
+
+  start          Start the daemon.
+  stop           Stop the daemon.
+  restart        Stop and restart the daemon.
+  force-reload   Enforce a reload to the configuration file.
+  status         Display the daemon status.
+  -h,--help      Display this help.
+  -v,--version   Display the version infomation.
+
+Report bugs to $AUTHORNAME <$AUTHORMAIL>
+EOF
+    exit 0
+    ;;
+  -v|--version)
+    cat << EOF
+$THISFILE version $VERSION by $AUTHORNAME <$AUTHORMAIL>
+EOF
+    exit 0
+    ;;
+  *)
+    echo "$THISFILE: unrecognized argument: $1" >&2
+    echo "Try \`$THISFILE --help' for more infomation" >&2
+    exit 1
+    ;;
+  esac
+  shift
+done
+
+# no action specified
+if test -z "$action"; then
+  echo "$THISFILE: what do you want to do now?" >&2
+  echo "Try \`$THISFILE --help' for more infomation" >&2
+  exit 1
+fi
+
+# act now!
+case "$action" in
+start)
+  start
+  RETVAL=$?
+  ;;
+stop)
+  stop
+  RETVAL=$?
+  ;;
+restart|force-reload)
+  restart
+  RETVAL=$?
+  ;;
+status)
+  status
+  RETVAL=$?
+  ;;
+esac
+
+exit $RETVAL

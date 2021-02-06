@@ -1,0 +1,62 @@
+vsntp SysV init.d start-up scripts README
+
+TABLE OF CONTENTS
+
+  * Preface
+  * Debian Based Systems
+  * Red Hat Based Systems
+
+PREFACE
+
+    Two SysV-styled init.d scripts are supplied with vsntp from 2.0.0,
+together with one configuration file.  One of them is for Debian based
+systems (Knoppix, Ubuntu... etc.)  The other is for Red Hat based systems
+(Fedora, Mandriva... etc.)  They are not installed by default.  You may
+install them so that vsntp will start as a daemon after each reboot.
+
+    Installion is easy.  You have to be root.
+
+DEBIAN BASED SYSTEMS
+
+    Copy the files to their appropriate directory:
+
+      # cp vsntp.debian /etc/init.d/vsntp
+      # cp vsntp /etc/default/vsntp
+
+    Edit /etc/default/vsntp to accommodate your environment.  Remember
+to uncomment the line with "SERVER=" and change it to your local NTP
+server.  Once finished, run:
+
+      # /etc/init.d/vsntp start
+
+    And watch the syslog.  vsntp shall start working.
+
+    To run it every time the system boots, use updat-rc.d:
+
+      # update-rc.d vsntp defaults 23
+
+    23 is taken from the start/stop order of the Debian ntp package.
+You may set it to your preferred order.
+
+RED HAT BASED SYSTEMS
+
+    Copy the files to their appropriate directory:
+
+      # cp vsntp.redhat /etc/init.d/vsntp
+      # cp vsntp /etc/sysconfig/vsntp
+
+    Edit /etc/sysconfig/vsntp to accommodate your environment.  Remember
+to uncomment the line with "SERVER=" and change it to your local NTP
+server.  Once finished, run:
+
+      # /etc/init.d/vsntp start
+
+    And watch the syslog.  vsntp shall start working.
+
+    To run it every time the system boots, use chkconfig:
+
+      # chkconfig --add vsntp
+
+imacat
+imacat@mail.imacat.idv.tw
+2007-03-30

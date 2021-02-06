@@ -1,0 +1,410 @@
+\input texinfo   @c -*-texinfo-*-
+@c %**start of header
+@setfilename vsntp.info
+@include version.texi
+@settitle vsntp v@value{VERSION}
+@syncodeindex vr cp
+@syncodeindex pg cp
+@c %**end of header
+
+@copying
+This manual is for vsntp
+(version @value{VERSION}, @value{UPDATED}),
+a SNTP daemon for Virtual @acronym{PC}@.
+
+Copyright @copyright{} 2003-2007 imacat@.
+
+@quotation
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the @acronym{GNU} Free Documentation License, Version 1.2
+or any later version published by the Free Software Foundation;
+with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts@.
+A copy of the license is included in the section entitled ``@acronym{GNU}
+Free Documentation License''@.
+@end quotation
+@end copying
+
+
+@titlepage
+@title vsntp v@value{VERSION}
+@c The following two commands start the copyright page.
+@page
+@vskip 0pt plus 1filll
+@insertcopying
+Published by imacat@*
+@email{imacat@@mail.imacat.idv.tw}@*
+@uref{http://www.imacat.idv.tw/}@*
+@end titlepage
+@c Output the table of contents at the beginning.
+@contents
+
+@ifnottex
+@node Top
+@top Short Sample
+@insertcopying
+@end ifnottex
+@menu
+* Introduction::
+* Download the Newest Version: Download.
+* Compilation and Installation: Install.
+* Running and Stopping: Run.
+* Command Line Options: Options.
+* Supports and Bugs Report: Support.
+* References::
+* Copyright::
+* Index::
+@end menu
+
+
+@node Introduction
+@chapter Introduction
+
+@pindex Virtual PC
+@pindex Connectix Virtual PC
+@cindex RFC 1769 SNTP
+@cindex UDP
+@dfn{vsntp} is an @acronym{SNTP} client daemon for machines without a
+sane system time@.  The word ``@dfn{vsntp}'' stands for
+``@dfn{@acronym{SNTP} for Virtual PC}''@.  It was originally designed
+for my @acronym{GNU}/Linux server running on Connectix Virtual @acronym{PC}@.
+It runs according to @acronym{RFC} 1769 @acronym{SNTP}, connecting
+the @acronym{NTP} server on @acronym{UDP} port 123@.  It was originally
+written for @acronym{GNU}/Linux@.
+
+Without Virtual @acronym{PC} Additions, the system time on Virtual @acronym{PC} is
+completely insane@.  It's @acronym{RTC} (Real Time Clock, or
+@acronym{CMOS} time, or hardware clock) is software emulated, which
+does not seems to be running@.  The @acronym{GNU}/Linux kernel hardly
+maintains a system time itself@.  With smooth run it goes 4 seconds
+ahead per minute, which is nearly 1.5 hours per day@.  That is
+insane@.  You can even tell it with your eyes@.
+
+@pindex David L. Mills
+@pindex ntp
+@findex adjtimex()
+@uref{http://www.ntp.org/,David L. Mills' @command{ntp}} does not
+work here@.  It uses a method that learns the clock frequency drift
+first, and adjust the kerenl clock with @code{adjtimex()} so that
+time adjustment goes smoothly, from the point of view of system and
+applications@.  This assumes an existing fix-speed system clock@.
+But this is not the case of Virtual @acronym{PC}@.  The system clock
+on Virtual @acronym{PC} is software emulated@.  It can be faster or
+slower now and then, depending on the load of the hosting machine@.
+There is no fixed clock speed@.  The frequency drift does not exist,
+then@.  It dooms to fail to measure it@.
+
+@pindex sntp
+There is an @command{sntp} client that comes with David L. Mills'
+@command{ntp} package@.  It is suggested to be run from
+@command{crontab}@.  But @command{crontab} runs by minutes, and
+Virtual @acronym{PC} goes 4 seconds ahead per minute@.  Rolling back
+4 seconds every minute is insane for most applications@.  It also
+increases system load heavily to run one instance per minute@.
+
+@findex settimeofday()
+@command{vsntp} is a workaround on this@.  It runs as a daemon to
+eliminates the additional system load on every synchronization@.  It
+uses @code{settimeofday()} to synchronize the time@.  It synchronizes
+the time with an arbitrary interval, so that time can be accurate
+within a second@.
+
+There are some defects@.  Synchronizing the time too often introduces
+heavy network load@.  It introduces heavy load on the target
+@acronym{NTP} server, too@.  You should have a working
+@acronym{NTP} server nearby that is owned by you@.  Also, since
+@code{settimeofday()} is called so often, high-accurate time
+operations like timer, @acronym{etc.}, may not run correctly@.
+
+@findex sleep()
+@findex alarm()
+@command{vsntp} uses @code{sleep()} as the synchronization scheduler.
+Reports show that on some systems @code{sleep()} may not function
+normally@.  If you find @command{vsntp} stops synchronization after
+running for some time, that the @code{sleep()} is not functioning
+normally on your system, you may want to switch to the @code{alarm()}
+scheduler with the @option{-a} switch@.
+
+If you ever encounter any problem, you may check your syslog@.
+@command{vsntp} logs detailed debugging information to syslog in log
+level @code{LOG_DEBUG} with facility @code{LOG_DAEMON}@.  You may turn
+it on in your @file{/etc/syslog.conf} with the following line:
+
+@example
+daemon.debug   /var/log/debug
+@end example
+
+and check the @file{/var/log/debug} file for the debugging message@.
+Remember to remove this afterwards, for the amount of the debugging
+messages may be huge and may use up your harddisk in a very short
+time@.  To the least it may slow down your system for frequent
+harddisk @acronym{I/O}@.
+
+@command{vsntp} was originally written for @acronym{GNU}/Linux@.  It
+uses @acronym{POSIX} compatible system calls@.  It should work on
+any @acronym{POSIX} compatible system@.  But I have yet only tested
+it on @uref{http://www.cygwin.com/, Cygwin}@.  Cygwin is known to
+work.  I don't have others to test and run on.  Please
+let me know (and submit the patch if needed) if you can port it to
+other systems@.  I know it does not work on MSWin32, for the way it
+handles the @acronym{PID} file path@.
+
+Please tell me if you have successfully running @command{vsntp} on
+other virtual machines, like @uref{http://www.vmware.com/, VMWare}@.
+
+Generally, please tell me if you are using @command{vsntp}@.  I
+would like to know that I am really doing some good for the world,
+*^_^*  but not having fun myself@. :p
+
+
+@node Download
+@chapter Download the Newest Version
+
+@cindex website
+@cindex official website
+@cindex download
+@cindex SourceForge
+@cindex Tavern IMACAT's
+@command{vsntp}'s official website is at@dots{}
+
+@itemize
+@item
+@uref{https://sourceforge.net/,SourceForge}'s home site:
+@uref{http://vsntp.sourceforge.net/}
+
+@item
+@uref{https://sourceforge.net/,SourceForge}'s project page:
+@uref{https://sourceforge.net/projects/vsntp/}
+
+@item
+@uref{http://www.imacat.idv.tw/,Tavern IMACAT's} page:
+@uref{http://www.imacat.idv.tw/tech/vsntp.html}
+@end itemize
+
+You can always download the newest version of @command{vsntp}
+from@dots{}
+
+@itemize
+@item
+SourceForge:
+@uref{https://sourceforge.net/project/showfiles.php?group_id=99098}
+
+@item
+Tavern IMACAT's @acronym{FTP}:
+@uref{ftp://ftp.imacat.idv.tw/pub/vsntp/}
+@end itemize
+
+imacat's @acronym{PGP} public key is at@dots{}
+
+@itemize
+@item
+SourceForge:
+@uref{http://vsntp.sourceforge.net/pgpkey.asc}
+
+@item
+Tavern IMACAT's:
+@uref{http://www.imacat.idv.tw/me/pgpkey.asc}
+@end itemize
+
+
+@node Install
+@chapter Compilation and Installation
+@command{vsntp} uses standard @acronym{GNU} @command{autoconf} to
+compile and install:
+
+@enumerate
+@item
+Download, unzip and untar the @command{vsntp} package:
+@example
+% tar xzf vsntp-@value{VERSION}.tar.gz
+@end example
+
+@item
+Go into its directory:
+@example
+% cd vsntp-@value{VERSION}
+@end example
+
+@pindex configure
+@item
+Configure with @command{./configure}:
+@example
+% ./configure
+@end example
+
+@item
+Compile with @command{make}:
+@example
+% make
+@end example
+The resulted executable will be named @file{vsntp}@.
+
+@item
+You need to be @code{root} in order to install @command{vsntp}:
+
+@example
+% su
+Password:
+#
+@end example
+
+@item
+You can simply copy @command{vsntp} to the appropriate directory:
+
+@example
+# cp vsntp /usr/local/sbin
+@end example
+
+Or, you can run automatic install:
+
+@example
+# make install
+@end example
+
+You can reduce the size of the installed executable by stripping off
+debug symbols inside:
+
+@example
+# make install-strip
+@end example
+
+By default @command{vsntp} will be installed in
+@file{/usr/local/sbin}@.
+@end enumerate
+
+
+@node Run
+@chapter Running and Stopping
+You need to be @code{root} to run @command{vsntp}@.  @command{vsntp}
+uses @code{settimeofday()} to set the system time@.
+@code{settimeofday()} requires @code{root} privilege@.
+
+To start @command{vsntp}, just specify your @acronym{NTP} server:
+
+@example
+# vsntp my.ntp.server.com
+@end example
+
+@command{vsntp} writes its @acronym{PID} in
+@file{/var/run/vsntp.pid}@.  To stop @command{vsntp}, @command{kill}
+it by its @acronym{PID}:
+
+@example
+# kill `cat /var/run/vsntp.pid`
+@end example
+
+The @acronym{PID} file location can be changed with the @option{-p}
+switch.
+
+
+@node Options
+@chapter Command Line Options
+
+@defopt{-i,--interval} @var{n}
+Set the synchronization interval to @var{n} seconds@.  Default is
+900@dmn{sec} (15@dmn{min})@.
+@end defopt
+
+@defopt{-p,--pidfile} @var{file}
+The @acronym{PID} file location@.  Default to @file{/var/run/vsntp.pid}@.
+@end defopt
+
+@defopt{-s,--sleep}
+Use @code{sleep()} to schedule synchronization@.  (default)
+@end defopt
+
+@defopt{-a,--alarm}
+Use @code{alarm()} to schedule synchronization@.
+@end defopt
+
+@defopt{-h,--help}
+Display the help message@.
+@end defopt
+
+@defopt{-v,--version}
+Display version information@.
+@end defopt
+
+
+@node Support
+@chapter Supports and Bugs Report
+
+@cindex SourceForge
+@cindex Tavern IMACAT's
+@command{vsntp} is hosted on
+@uref{https://sourceforge.net/,SourceForge} and
+@uref{http://www.imacat.idv.tw/,Tavern IMACAT's}@.  For the latest
+infomation, see:
+
+@itemize
+@item
+@uref{http://vsntp.sourceforge.net/}
+@item
+@uref{https://sourceforge.net/projects/vsntp/}
+@item
+@uref{http://www.imacat.idv.tw/tech/vsntp.html}
+@end itemize
+
+@cindex mailing list
+@cindex Mailman
+@command{vsntp} has a mailing list hosted at
+@uref{https://sourceforge.net/,SourceForge}:
+@email{vsntp-users@@lists.sourceforge.net}@.  Please submit your
+questions, suggestions or bug reports there@.  It is a
+@uref{http://www.list.org/,Mailman} mailing list@.  For more
+information, see:
+@uref{https://lists.sourceforge.net/lists/listinfo/vsntp-users}@.
+Alternatively, you can send a mail to:
+@email{vsntp-users-request@@lists.sourceforge.net}
+with the subject @code{help} for a list of available e-mail
+commands@.
+
+
+@node References
+@unnumbered References
+
+@findex settimeofday()
+@findex adjtimex()
+@pindex ntp
+@cindex RFC 1769 SNTP
+@cindex RFC 1305 NTP
+@itemize
+@item
+@inforef{High-Resolution Calendar, ,libc}, for settimeofday() and adjtimex().
+@inforef{Setting an Alarm, ,libc}, for alarm().
+@inforef{Sleeping, ,libc}, for sleep().
+@item
+@uref{http://www.ntp.org/,ntp}
+@item
+@uref{http://www.faqs.org/rfcs/rfc1769.html,@acronym{RFC} 1769 @acronym{SNTP}}.
+@item
+@uref{http://www.faqs.org/rfcs/rfc1305.html,@acronym{RFC} 1305 @acronym{NTP}}.
+@end itemize
+
+
+@node Copyright
+@unnumbered Copyright
+
+@quotation
+Copyright @copyright{} 2003-2007 imacat@.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the @cite{@acronym{GNU} General Public License}
+as published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version@.
+
+This program is distributed in the hope that it will be useful,
+but @emph{WITHOUT ANY WARRANTY}; without even the implied warranty of
+@emph{MERCHANTABILITY} or @emph{FITNESS FOR A PARTICULAR PURPOSE}@.
+See the @cite{@acronym{GNU} General Public License} for more details@.
+
+You should have received a copy of the @cite{@acronym{GNU} General
+Public License} along with this program@.  If not, see
+<@uref{http://www.gnu.org/licenses/}>@.
+@end quotation
+
+@node Index
+@unnumbered Index
+@printindex cp
+@bye
+
+@bye

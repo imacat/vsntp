@@ -1,0 +1,31 @@
+vsntp NEWS
+
+2007-03-29	version 2.0.0
+	 1. Added alarm() in addition to sleep() as an alternative
+	    synchronization scheduler, in order to fix a problem that vsntp
+	    sleep() may stop working after MS Virtual PC 2007 was suspended
+	    for a while, as reported and suggested by Jean-Alain Le Borgne
+	    <jalb@pobox.com> 2007-03-26.  The codes are based on
+	    Jean-Alain's contribution.  Thank you.  Two new switches "-a" and
+	    "-s" were added for for setting the schedular.  Currently the
+	    default is -s (sleep()).  If you find vsntp stops synchronization
+	    after running for some time, that the sleep() is not functioning
+	    normally on your system, you may try to switch to alarm() using
+	    the "-a" switch.
+	 2. More debugging information were logged, in the syslog log level
+	    LOG_DEBUG with log facility LOG_DAEMON.
+	 3. Two SysV-styled init scripts are provided for convenience in the
+	    init.d subdirectory.  Check the README file in that directory for
+	    more information.
+
+2004-01-14	version 1.1.1
+	Documentation fix.
+	 1. Reference information revised.
+
+2004-01-12	version 1.1.0
+	First public release.
+	 1. Added -i and -p switch.
+	 2. Documentation added.
+
+2003-12-24	version 1.0.0
+	First version.

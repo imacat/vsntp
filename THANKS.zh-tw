@@ -1,0 +1,5 @@
+    感謝 SourceForge 熱心提供架設 vsntp 。
+
+    感謝 Jean-Alain Le Borgne <jalb@pobox.com> 於 2007-03-26 偵錯並找出
+以 sleep() 定時，在 MS Virtual PC 2007 暫停一段時間後恢復，會醒不來的問題，
+回報該問題，並提供 alarm() 作為替代的定時器的修正程式。

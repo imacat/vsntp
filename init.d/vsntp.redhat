@@ -1,0 +1,148 @@
+#!/bin/sh
+# start and stop the SNTP client for Virtual PC
+
+# Red Hat styled comments for chkconfig
+# chkconfig: 2345 58 74
+# description: SNTP client for Virtual PC
+# processname: vsntp
+# config: /etc/sysconfig/vsntp
+
+# LSB-convension comments
+# See: http://refspecs.freestandards.org/LSB_3.1.0/LSB-Core-generic/LSB-Core-generic/initscrcomconv.html
+### BEGIN INIT INFO
+# Provides:          vsntp
+# Required-Start:    $network $time
+# Required-Stop:     
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: start and stop the SNTP client for Virtual PC
+# Description:       vsntp is a SNTP client for Virtual PC that synchronize
+#                    time periodically for systems without hardward RTC.
+### END INIT INFO
+
+export PATH=/sbin:/bin:/usr/sbin:/usr/bin
+
+# initialize the environment
+THISFILE="${0##*/}"
+VERSION="1.0.0"
+AUTHORNAME=imacat
+AUTHORMAIL=imacat@mail.imacat.idv.tw
+lock=/var/lock/subsys/vsntp
+
+# Source function library.
+. /etc/init.d/functions
+
+# Source networking configuration.
+. /etc/sysconfig/network
+
+# Check that networking is up.
+[ ${NETWORKING} = "no" ] && exit 0
+
+if [ -f /etc/sysconfig/vsntp ];then
+  . /etc/sysconfig/vsntp
+fi
+case "$SCHEDULER" in
+alarm|a|-a|--alarm)
+  SCHEDULER=-a ;;
+*)
+  SCHEDULER=-s ;;
+esac
+
+# default values -- do not change anything here
+_DEFSYNC_INTERVAL=900
+_DEFSCHEDULER=-s
+
+RETVAL="0"
+OPTIONS=""
+test -n "$SCHEDULER" -a "$SCHEDULER" != "$_DEFSCHEDULER" && OPTIONS="$OPTIONS $SCHEDULER"
+test -n "$SYNC_INTERVAL" -a "$SYNC_INTERVAL" != "$_DEFSYNC_INTERVAL" && OPTIONS="$OPTIONS -i $SYNC_INTERVAL"
+OPTIONS="$OPTIONS $SERVER"
+
+# See how we were called.
+start() {
+  echo -n "Starting SNTP client for Virtual PC: "
+  daemon vsntp $OPTIONS
+  RETVAL="$?"
+  echo
+  [ "$RETVAL" -eq "0" ] && touch $lock
+  return "$RETVAL"
+}
+stop() {
+  echo -n "Stopping SNTP client for Virtual PC: "
+  killproc vsntp
+  RETVAL="$?"
+  echo
+  [ "$RETVAL" -eq "0" ] && rm -f $lock
+  return "$RETVAL"
+}
+rhstatus() {
+  status vsntp
+}
+restart() {
+  stop
+  start
+}
+
+
+# parse the arguments
+while [ "$#" != "0" ]; do
+  case "$1" in
+  start|stop|restart|status)
+    action="$1"
+    ;;
+  -h|--help)
+    cat << EOF
+Start and/or stop the SNTP client for Virtual PC
+Usage: $THISFILE {start|stop|restart|status}
+
+  start         Start the daemon.
+  stop          Stop the daemon.
+  restart       Stop and restart the daemon.
+  status        Display the daemon status
+  -h,--help     Display this help.
+  -v,--version  Display the version infomation.
+
+Report bugs to $AUTHORNAME <$AUTHORMAIL>
+EOF
+    exit 0
+    ;;
+  -v|--version)
+    cat << EOF
+$THISFILE v$VERSION by $AUTHORNAME <$AUTHORMAIL>
+EOF
+    exit 0
+    ;;
+  *)
+    echo "$THISFILE: unrecognized argument: $1"
+    echo "Try \`$THISFILE --help' for more infomation"
+    exit 1
+    ;;
+  esac
+  shift
+done
+
+# check the arguments
+if [ -z "$action" ]; then
+  cat << EOF
+Usage: $THISFILE {start|stop|restart|status}
+EOF
+  exit 0
+fi
+
+# process now
+case "$action" in
+start)
+  start
+  ;;
+stop)
+  stop
+  ;;
+restart)
+  restart
+  ;;
+status)
+  rhstatus
+  ;;
+esac
+
+exit $?
